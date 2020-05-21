@@ -68,6 +68,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   timerId = setInterval(moveDown, 400)
 
+  //assign func to keycode
+  function control(e) {
+    console.log('im hit')
+    if(e.keyCode === 37) {
+      moveLeft();
+    } else if (e.keyCode === 38) {
+      //rotate()
+    } else if (e.keyCode === 39) {
+      moveRight()
+    } else if (e.keyCode === 40) {
+      //moveDown()
+    }
+  }
+  document.addEventListener('keyup',control)
+
+
   //move down func
   function moveDown() {
     undraw()
@@ -86,6 +102,36 @@ document.addEventListener('DOMContentLoaded', () => {
       currentPosition = 4
       draw()
     }
+  }
+
+  //move blocks left, unless its at the edge or there is a blockade
+
+  function moveLeft() {
+    undraw()
+    const isAtLeftEdge = current.some(index => (currentPosition + index) % width === 0)
+
+    if(!isAtLeftEdge) currentPosition -=1
+
+    if(current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
+      currentPosition += 1
+    }
+
+    draw()
+
+  }
+  //moveRight func
+  function moveRight() {
+    undraw()
+    const isAtRightEdge = current.some(index => (currentPosition + index) % width === width -1)
+
+    if(!isAtRightEdge) currentPosition +=1
+
+    if(current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
+      currentPosition -= 1
+    }
+
+    draw()
+
   }
 
 
