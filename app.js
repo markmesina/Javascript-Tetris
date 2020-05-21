@@ -1,10 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
   const grid = document.querySelector('.grid');
   let squares = Array.from (document.querySelectorAll('.grid div'));
-  const scoreDisplay = document.querySelectorAll('#score');
+  const scoreDisplay = document.querySelector('#score');
   const startBtn = document.querySelector('#start-button');
   const width = 10
   let nextRandom = 0
+  let score = 0
   let timerId
   //tetrominoes
   const lTetromino = [
@@ -79,7 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (e.keyCode === 39) {
       moveRight()
     } else if (e.keyCode === 40) {
-      //moveDown()
+      console.log('down')
+      moveDown()
     }
   }
   document.addEventListener('keyup',control)
@@ -104,6 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
       currentPosition = 4
       draw()
       displayShape()
+      addScore()
     }
   }
 
@@ -184,6 +187,26 @@ document.addEventListener('DOMContentLoaded', () => {
       displayShape()
     }
   })
+
+  //add score
+
+  function addScore() {
+    for (let i = 0; i < 199; i +=width) {
+      const row = [ i, i+1, i+2, i+3, i+4, i+5, i+6, i+7, i+8, i+9]
+      
+      if(row.every(index => squares[index].classList.contains('taken'))) {
+        score += 10
+        scoreDisplay.innerHTML = score
+        row.forEach( index => {
+          squares[index].classList.remove('taken')
+          squares[index].classList.remove('tetromino')
+        })
+        const squaresRemoved = squares.splice(i, width)
+        squares = squaresRemoved.concat(squares)
+        squares.forEach(cell => grid.appendChild(cell))
+      }
+    }
+  }
 
 
 
